@@ -93,7 +93,6 @@
 # end
 
 # puts "Data import completed successfully."
-
 require 'csv'
 
 csv_file_path = Rails.root.join('config', 'data', 'diem_thi_thpt_2024.csv')
@@ -115,13 +114,13 @@ Subject.insert_all(subjects_data)
 subjects_map = Subject.pluck(:name, :id).to_h
 
 # Process data in two phases to properly handle foreign keys
-# Phase 1: Import first 1000 students
+# Phase 1: Import first 10000 students
 student_batch = []
 batch_size = 1000
 row_count = 0
 
 CSV.foreach(csv_file_path, headers: true).with_index do |row, index|
-  break if row_count >= 1000 # Stop after 1000 rows
+  break if row_count >= 10000 # Stop after 10000 rows
 
   begin
     row_data = row.to_hash
@@ -137,7 +136,7 @@ CSV.foreach(csv_file_path, headers: true).with_index do |row, index|
 
     row_count += 1
 
-    if student_batch.size >= batch_size || row_count >= 1000
+    if student_batch.size >= batch_size || row_count >= 10000
       Student.insert_all(student_batch)
       student_batch.clear
       puts "Imported #{row_count} students..."
@@ -153,13 +152,13 @@ if student_batch.any?
   puts "Imported final batch of #{student_batch.size} students."
 end
 
-# Phase 2: Import scores for the first 1000 students
+# Phase 2: Import scores for the first 10000 students
 students_map = Student.pluck(:sbd, :id).to_h
 score_batch = []
 row_count = 0
 
 CSV.foreach(csv_file_path, headers: true).with_index do |row, index|
-  break if row_count >= 1000 # Stop after 1000 rows
+  break if row_count >= 10000 # Stop after 10000 rows
 
   begin
     row_data = row.to_hash
@@ -181,7 +180,7 @@ CSV.foreach(csv_file_path, headers: true).with_index do |row, index|
 
     row_count += 1
 
-    if score_batch.size >= batch_size * 9 || row_count >= 1000
+    if score_batch.size >= batch_size * 9 || row_count >= 10000
       SubjectScore.insert_all(score_batch)
       score_batch.clear
       puts "Imported scores up to row #{row_count}..."
