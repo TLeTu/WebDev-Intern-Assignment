@@ -1,24 +1,7 @@
-# README
+# Tran Le Tu's Web Developer Intern Assignment
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## To run the project locally make sure you have ruby + rails + postgresql installed
+- Simply clone the project and runs:
+    + bin/rails db:migrate and bin/rails db:seed to set up the database
+    + Then you can start the web locally with bin/dev
+- Or you can check out the demo here:
