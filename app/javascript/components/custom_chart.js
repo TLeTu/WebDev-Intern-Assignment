@@ -1,8 +1,9 @@
 function renderCharts() {
   // Clean up existing charts to prevent memory leaks
   document.querySelectorAll(".chart-canvas").forEach(canvas => {
-    if (canvas.chart) {
-      canvas.chart.destroy();
+    const existingChart = Chart.getChart(canvas); // Chart.js v3+
+    if (existingChart) {
+      existingChart.destroy();
     }
   });
 
@@ -23,12 +24,12 @@ function renderCharts() {
       return;
     }
 
-    canvas.chart = new Chart(canvas, {
+    new Chart(canvas.getContext("2d"), {
       type: "bar",
       data: {
         labels: labels,
         datasets: [{
-          label: "Score Counts",
+          label: "Students Counts",
           data: data,
           backgroundColor: "rgba(75, 192, 192, 0.2)",
           borderColor: "rgba(75, 192, 192, 1)",
@@ -37,7 +38,7 @@ function renderCharts() {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: false, // Allows container height to control chart height
         scales: {
           y: {
             beginAtZero: true,
@@ -57,7 +58,7 @@ function renderCharts() {
   });
 }
 
-// Run on initial load and navigation
+// Re-render charts after page load or Turbo/Turbolinks navigation
 document.addEventListener("DOMContentLoaded", renderCharts);
 document.addEventListener("turbo:load", renderCharts);
 document.addEventListener("turbolinks:load", renderCharts);

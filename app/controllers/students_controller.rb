@@ -1,9 +1,9 @@
 class StudentsController < ApplicationController
   SCORE_RANGES = {
-    first_level: { min: 8, max: 10 },
-    second_level: { min: 6, max: 8 },
-    third_level: { min: 4, max: 6 },
-    fourth_level: { min: 0, max: 4 }
+    excellent_student: { min: 8, max: 10 },
+    good_student: { min: 6, max: 8 },
+    average_student: { min: 4, max: 6 },
+    weak_student: { min: 0, max: 4 }
   }.freeze
   def index
     @top_10_natural_science = Rails.cache.fetch("top_10_natural_science", expires_in: 1.hour) do
@@ -19,7 +19,7 @@ class StudentsController < ApplicationController
         Student.with_sbd(sbd_param)
       end
 
-      flash.now[:error] = "Invalid registration number." unless @student
+      flash.now[:error] = "Invalid registration number." unless @student.present?
     else
       flash.now[:error] = "Invalid registration number."
     end
@@ -27,16 +27,17 @@ class StudentsController < ApplicationController
 
 
   def statistics
-    @subjects = Subject.all.index_by(&:id)
+    subjects = Subject.all
 
     @score_counts = Rails.cache.fetch("score_statistics", expires_in: 1.hour) do
       SCORE_RANGES.transform_values do |range|
-        @subjects.transform_values do |subject|
-          Student.count_with_score_in_range(subject.id, range[:min], range[:max])
+        subjects.each_with_object({}) do |subject, hash|
+          hash[subject.display_name] = Student.count_with_score_in_range(subject.id, range[:min], range[:max])
         end
       end
     end
   end
+
 
   def sbd_param
     params.require(:sbd)

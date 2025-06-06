@@ -3,87 +3,93 @@
   <div class="bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">User Registration</h1>
     
-    <% if flash[:error] %>
+    <% if flash[:error].present? %>
       <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
         <%= flash[:error] %>
       </div>
     <% end %>
 
     <%= form_with url: students_search_path, method: :get, class: "space-y-4" do |form| %>
-      <div>
-        <%= form.label "Registration Number", class: "block text-sm font-medium text-gray-700" %>
-        <%= form.text_field :sbd,
-                            required: true,
-                            pattern: "\\d{7,8}",
-                            maxlength: 8,
-                            minlength: 7,
-                            placeholder: "Enter your registration number (7-8 digits)",
-                            oninput: "validateSbd(this)",
-                            class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" %>
-      </div>
-      <div>
-        <%= form.submit "Submit", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500" %>
-      </div>
-      <div id="sbd-error" class="text-red-600 text-sm mt-1"></div>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+            <div class="flex-1">
+            <%= form.label "Registration Number", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :sbd,
+                                required: true,
+                                pattern: "\\d{7,8}",
+                                maxlength: 8,
+                                minlength: 7,
+                                placeholder: "Enter your registration number (7-8 digits)",
+                                oninput: "validateSbd(this)",
+                                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" %>
+            </div>
+            <div class="mt-4 sm:mt-6">
+            <%= form.submit "Submit", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500" %>
+            </div>
+        </div>
+        <div id="sbd-error" class="text-red-600 text-sm mt-1"></div>
     <% end %>
+
   </div>
 
   <!-- Table Panel -->
-  <% if @student %>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">Detailed Scores</h1>
-      <% cache ["scores_table", @student.sbd, @student.updated_at] do %>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-            <thead class="bg-gray-100">
-              <tr>
-                <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Subject</th>
-                <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Score</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Toán</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('toan') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Ngữ văn</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('ngu_van') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Ngoại ngữ</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('ngoai_ngu') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Vật lí</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('vat_li') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Hóa học</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('hoa_hoc') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Sinh học</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('sinh_hoc') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Lịch sử</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('lich_su') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">GDCD</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('gdcd') || "N/A" %></td>
-              </tr>
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-900">Mã ngoại ngữ</td>
-                <td class="px-4 py-3 text-sm text-gray-900"><%= @student.ma_ngoai_ngu || "N/A" %></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      <% end %>
-    </div>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Detailed Scores</h1>
+  <% if @student.is_a?(Student) %>
+    <% cache ["scores_table", @student.sbd, @student.updated_at] do %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Subject</th>
+              <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">Score</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Toán</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('toan') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Ngữ văn</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('ngu_van') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Ngoại ngữ</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('ngoai_ngu') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Vật lí</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('vat_li') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Hóa học</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('hoa_hoc') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Sinh học</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('sinh_hoc') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Lịch sử</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('lich_su') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">GDCD</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.score_for('gdcd') || "N/A" %></td>
+            </tr>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-4 py-3 text-sm text-gray-900">Mã ngoại ngữ</td>
+              <td class="px-4 py-3 text-sm text-gray-900"><%= @student.ma_ngoai_ngu || "N/A" %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-gray-500 text-sm">Detailed view of search scores here.</p>
   <% end %>
+</div>
+
 </div>
 
 <script>
