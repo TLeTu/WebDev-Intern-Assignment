@@ -4,4 +4,5 @@
 - Simply clone the project and runs:
     + bin/rails db:migrate and bin/rails db:seed to set up the database
     + Then you can start the web locally with bin/dev
-- Or you can check out the demo here:
+- Or you can check out the demo here: https://webdev-intern-assignment-axfw.onrender.com/students/statistics
+- Please note that the live demo will only have the first 10.000 rows of data from the dataset, and the cache logic is removed (it is still used for the local version).
