@@ -35,7 +35,6 @@
   <div class="bg-white p-6 rounded-lg shadow-md">
   <h1 class="text-3xl font-bold text-gray-800 mb-6">Detailed Scores</h1>
   <% if @student.is_a?(Student) %>
-    <% cache ["scores_table", @student.sbd, @student.updated_at] do %>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
           <thead class="bg-gray-100">
@@ -84,7 +83,6 @@
           </tbody>
         </table>
       </div>
-    <% end %>
   <% else %>
     <p class="text-gray-500 text-sm">Detailed view of search scores here.</p>
   <% end %>
