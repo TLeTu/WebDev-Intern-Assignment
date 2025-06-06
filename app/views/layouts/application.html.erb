@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Web Dev Intern Assignment" %></title>
+    <title><%= content_for(:title) || "WebDev Intern Assignment" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,9 +20,56 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #sidebar {
+        background: #1B1E1F !important;
+      }
+    </style>
   </head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/path/to/statistics.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const main = document.querySelector('main');
+      sidebar.classList.toggle('translate-x-0');
+      sidebar.classList.toggle('-translate-x-full');
+      main.classList.toggle('md:ml-64');
+      main.classList.toggle('md:ml-0');
+    }
+  </script>
 
-  <body>
-    <%= yield %>
+  <body class="flex flex-col min-h-screen bg-gray-100">
+    <header class="fixed top-0 left-0 w-full bg-indigo-800 text-yellow-400 text-center py-4 shadow-md z-20">
+      <h1 class="text-xl md:text-2xl font-semibold">
+        <%= content_for(:banner_text) || "Welcome to Intern Assignment" %>
+      </h1>
+    </header>
+    <div class="flex flex-1 mt-16">
+      <nav id="sidebar" class="fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 text-white flex flex-col p-4 shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-10">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-2xl font-bold">Intern Assignment</h1>
+          <button onclick="toggleSidebar()" class="md:hidden text-white focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex flex-col space-y-2">
+          <%= link_to "Dashboard", root_path, class: "block py-2 px-4 rounded-lg hover:bg-indigo-800 transition-colors" %>
+          <%= link_to "Search Scores", students_search_path, class: "block py-2 px-4 rounded-lg hover:bg-indigo-800 transition-colors" %>
+          <%= link_to "Statistics", students_statistics_path, class: "block py-2 px-4 rounded-lg hover:bg-indigo-800 transition-colors" %>
+        </div>
+      </nav>
+      <main class="flex-1 p-6 md:ml-64 transition-all duration-300 mt-2">
+        <button onclick="toggleSidebar()" class="md:hidden mb-4 bg-indigo-800 text-white p-2 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>
