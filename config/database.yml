@@ -79,20 +79,6 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    database: web_dev_intern_assignment_production
-    username: web_dev_intern_assignment
-    password: <%= ENV["WEB_DEV_INTERN_ASSIGNMENT_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: web_dev_intern_assignment_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: web_dev_intern_assignment_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: web_dev_intern_assignment_production_cable
-    migrations_paths: db/cable_migrate
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
+
