@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "redis", "~> 4.0"
 gem "tailwindcss-rails", "~> 4.0"
 gem "tailwindcss-ruby", "~> 4.0"
 gem "csv"
